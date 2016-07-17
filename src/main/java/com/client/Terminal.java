@@ -5,7 +5,7 @@ package com.client;
  */
 public class Terminal
 {
-    private int terminalId;
+    private String terminalId;
     private String terminalType;
     private String serverIpAddress;
     private int portNumber;
@@ -13,7 +13,7 @@ public class Terminal
 
 
     //getter
-    public int getTerminalId() {
+    public String getTerminalId() {
         return terminalId;
     }
 
@@ -34,7 +34,7 @@ public class Terminal
     }
 
     //setter
-    public void setTerminalId(int terminalId) {
+    public void setTerminalId(String terminalId) {
         this.terminalId = terminalId;
     }
 

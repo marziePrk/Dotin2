@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 public class Transaction implements Serializable {
     private int transactionId;
     private String transactionType;
-    //BigDecimal???
     private BigDecimal transactionAmount;
     private int depositId;
     

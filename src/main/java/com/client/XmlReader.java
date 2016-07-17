@@ -41,7 +41,7 @@ public class XmlReader
             if (nodeTerminal.getNodeType() == Node.ATTRIBUTE_NODE) {
                 NamedNodeMap terminalAttrs = nodeTerminal.getAttributes();
                 //set  terminal id
-                int terminalId = Integer.parseInt(terminalAttrs.getNamedItem("id").getTextContent());
+                String terminalId = terminalAttrs.getNamedItem("id").getTextContent();
                 terminal.setTerminalId(terminalId);
                 System.out.println("Terminal Id= " + terminalId);
                 //set terminal port
@@ -83,7 +83,7 @@ public class XmlReader
                 System.out.println(nodeTransaction.getNodeName());
                 System.out.println("........................................");
                 NamedNodeMap transactionAttrs = nodeTransaction.getAttributes();
-                // set transaction Id
+                 //set transaction Id
                 int transactionId = Integer.parseInt(transactionAttrs.getNamedItem("id").getTextContent());
                 System.out.println("id= " + transactionId);
                 transaction.setTransactionId(transactionId);

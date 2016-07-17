@@ -52,7 +52,10 @@ public class ServerMain extends Thread
     //Server Main
     public static void main(String [] args)
     {
-      int port=8080;
+        String path = "resources\\core.json";
+        JsonParserClass jsonParserClass = new JsonParserClass();
+        jsonParserClass.readJson(path);
+        int port =jsonParserClass.getPort();
         try
         {
             Thread t = new ServerMain(port);
