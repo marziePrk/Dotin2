@@ -20,7 +20,8 @@ public class ClientMain
                 Socket clientSocket = new Socket(ipAddress, port);
                 System.out.println("Just connected to " + clientSocket.getRemoteSocketAddress());
                 ObjectOutputStream clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-                clientOutput.writeObject(xmlReader.transactionList.get(counter));
+                Transaction transaction = xmlReader.transactionList.get(counter);
+                clientOutput.writeObject(transaction);
                 ObjectInputStream clientInput = new ObjectInputStream(clientSocket.getInputStream());
                 System.out.println("Server says " + clientInput.readObject());
                 clientSocket.close();

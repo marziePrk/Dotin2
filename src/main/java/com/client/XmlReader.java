@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dotin school 6 on 7/12/2016.
@@ -21,8 +22,7 @@ import java.util.ArrayList;
 public class XmlReader
 {
     Terminal terminal = new Terminal();
-    Transaction transaction = new Transaction();
-    ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
+    List<Transaction> transactionList = new ArrayList<Transaction>();
 
     public  void readXml(String path) {
         try {
@@ -79,12 +79,13 @@ public class XmlReader
             //............................transaction................................
             NodeList nodeListTransaction = document.getElementsByTagName("transaction");
             for (int counter = 0; counter < nodeListTransaction.getLength(); counter++) {
+                Transaction transaction = new Transaction();
                 Node nodeTransaction = nodeListTransaction.item(counter);
                 System.out.println(nodeTransaction.getNodeName());
                 System.out.println("........................................");
                 NamedNodeMap transactionAttrs = nodeTransaction.getAttributes();
                  //set transaction Id
-                int transactionId = Integer.parseInt(transactionAttrs.getNamedItem("id").getTextContent());
+                String transactionId = transactionAttrs.getNamedItem("id").getTextContent();
                 System.out.println("id= " + transactionId);
                 transaction.setTransactionId(transactionId);
                 //set transaction type
@@ -96,13 +97,15 @@ public class XmlReader
                 System.out.println("amount= " + transactionAmount);
                 transaction.setTransactionAmount(transactionAmount);
                 //set transaction deposit Id
-                int depositId = Integer.parseInt(transactionAttrs.getNamedItem("deposit").getTextContent());
+                String depositId = transactionAttrs.getNamedItem("deposit").getTextContent();
                 System.out.println("deposit= " + depositId);
                 transaction.setDepositId(depositId);
                 System.out.println("\n");
                 transactionList.add(transaction);
             }
-            System.out.println(transactionList);
+            System.out.println(transactionList.size());
+            System.out.println(transactionList.get(0).getTransactionType());
+            System.out.println(transactionList.get(1).getTransactionType());
                 //System.out.println(terminal.getPortNumber());
             }catch(ParserConfigurationException e){
                 e.printStackTrace();

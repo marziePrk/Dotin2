@@ -11,7 +11,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Dotin school 6 on 7/17/2016.
@@ -19,6 +18,7 @@ import java.util.List;
 public class JsonParserClass
 {
    private  static int port;
+   public ArrayList<Deposit> depositList = new ArrayList<Deposit>();
 
     public static int getPort() {
         return port;
@@ -29,12 +29,10 @@ public class JsonParserClass
             FileReader jsonFile = new FileReader(path);
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonFileObject = (JSONObject) jsonParser.parse(jsonFile);
-            Object portLong = jsonFileObject.get("port");
-            port = Integer.valueOf((String)portLong);
+            port = ((Number)jsonFileObject.get("port")).intValue();
             System.out.println("port =" +port);
             String outLog =(String)jsonFileObject.get("outLog");
             System.out.println("outLog =" +outLog);
-            List<Deposit> depositList = new ArrayList<Deposit>();
             JSONArray depositAray = (JSONArray) jsonFileObject.get("deposits");
 
             for (int counter = 0 ; counter < depositAray.size() ; counter++) {

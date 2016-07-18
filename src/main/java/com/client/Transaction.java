@@ -8,13 +8,13 @@ import java.math.BigDecimal;
  * Created by Dotin school 6 on 7/12/2016.
  */
 public class Transaction implements Serializable {
-    private int transactionId;
+    private String transactionId;
     private String transactionType;
     private BigDecimal transactionAmount;
-    private int depositId;
+    private String depositId;
     
     //getter
-    public int getTransactionId() {
+    public String getTransactionId() {
         return transactionId;
     }
 
@@ -26,12 +26,12 @@ public class Transaction implements Serializable {
         return transactionAmount;
     }
 
-    public int getDepositId() {
+    public String getDepositId() {
         return depositId;
     }
 
     //setter
-    public void setTransactionId(int transactionId) {
+    public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
     }
 
@@ -43,7 +43,7 @@ public class Transaction implements Serializable {
         this.transactionAmount =amountString ;
     }
 
-    public void setDepositId(int depositId) {
+    public void setDepositId(String depositId) {
         this.depositId = depositId;
     }
 }

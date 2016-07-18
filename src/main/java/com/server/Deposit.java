@@ -1,13 +1,14 @@
 package com.server;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * Created by Dotin school 6 on 7/17/2016.
  */
-public class Deposit {
+public class Deposit implements Serializable{
     private String customer;
-    private String id;
+    private String customerId;
     private BigDecimal initialBalance;
     private BigDecimal upperBound;
 
@@ -16,8 +17,8 @@ public class Deposit {
         return customer;
     }
 
-    public String getId() {
-        return id;
+    public String getCustomerId() {
+        return customerId;
     }
 
     public BigDecimal getInitialBalance() {
@@ -33,8 +34,8 @@ public class Deposit {
         this.customer = customer;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String customerId) {
+        this.customerId = customerId;
     }
 
     public void setInitialBalance(BigDecimal initialBalance) {
