@@ -17,8 +17,8 @@ import java.util.ArrayList;
  */
 public class JsonParserClass
 {
-   private  static int port;
-   public ArrayList<Deposit> depositList = new ArrayList<Deposit>();
+    private  static int port;
+    public ArrayList<Deposit> depositList = new ArrayList<Deposit>();
 
     public static int getPort() {
         return port;

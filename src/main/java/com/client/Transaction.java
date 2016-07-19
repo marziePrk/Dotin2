@@ -12,7 +12,7 @@ public class Transaction implements Serializable {
     private String transactionType;
     private BigDecimal transactionAmount;
     private String depositId;
-    
+
     //getter
     public String getTransactionId() {
         return transactionId;

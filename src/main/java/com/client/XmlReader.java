@@ -56,26 +56,26 @@ public class XmlReader
             Node nodeServer = nodeListServer.item(0);
             System.out.println(nodeServer.getNodeName());
             System.out.println("........................................");
-                NamedNodeMap serverAttrs = nodeServer.getAttributes();
-                //set server port
-                int port = Integer.parseInt(serverAttrs.getNamedItem("port").getTextContent());
-                System.out.println("port = " + port);
-                terminal.setPortNumber(port);
-                //set server IP
-                String serverIP = serverAttrs.getNamedItem("ip").getTextContent();
-                System.out.println("Server ip = " + serverIP);
-                terminal.setServerIpAddress(serverIP);
-                System.out.println("\n");
+            NamedNodeMap serverAttrs = nodeServer.getAttributes();
+            //set server port
+            int port = Integer.parseInt(serverAttrs.getNamedItem("port").getTextContent());
+            System.out.println("port = " + port);
+            terminal.setPortNumber(port);
+            //set server IP
+            String serverIP = serverAttrs.getNamedItem("ip").getTextContent();
+            System.out.println("Server ip = " + serverIP);
+            terminal.setServerIpAddress(serverIP);
+            System.out.println("\n");
             //..............................outLog...........................
             NodeList nodeListOutLog = document.getElementsByTagName("outLog");
             Node nodeOutLog = nodeListOutLog.item(0);
             System.out.println(nodeOutLog.getNodeName());
             System.out.println("........................................");
-                NamedNodeMap outLogAttrs = nodeOutLog.getAttributes();
-                String outLogPath = outLogAttrs.getNamedItem("path").getTextContent();
-                System.out.println("path = " + outLogPath);
-                terminal.setOutLogPath(outLogPath);
-                System.out.println("\n");
+            NamedNodeMap outLogAttrs = nodeOutLog.getAttributes();
+            String outLogPath = outLogAttrs.getNamedItem("path").getTextContent();
+            System.out.println("path = " + outLogPath);
+            terminal.setOutLogPath(outLogPath);
+            System.out.println("\n");
             //............................transaction................................
             NodeList nodeListTransaction = document.getElementsByTagName("transaction");
             for (int counter = 0; counter < nodeListTransaction.getLength(); counter++) {
@@ -84,7 +84,7 @@ public class XmlReader
                 System.out.println(nodeTransaction.getNodeName());
                 System.out.println("........................................");
                 NamedNodeMap transactionAttrs = nodeTransaction.getAttributes();
-                 //set transaction Id
+                //set transaction Id
                 String transactionId = transactionAttrs.getNamedItem("id").getTextContent();
                 System.out.println("id= " + transactionId);
                 transaction.setTransactionId(transactionId);
@@ -106,16 +106,16 @@ public class XmlReader
             System.out.println(transactionList.size());
             System.out.println(transactionList.get(0).getTransactionType());
             System.out.println(transactionList.get(1).getTransactionType());
-                //System.out.println(terminal.getPortNumber());
-            }catch(ParserConfigurationException e){
-                e.printStackTrace();
-            }catch(SAXException e){
-                e.printStackTrace();
-            }catch(IOException e){
-                e.printStackTrace();
-            }
+            //System.out.println(terminal.getPortNumber());
+        }catch(ParserConfigurationException e){
+            e.printStackTrace();
+        }catch(SAXException e){
+            e.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
         }
-
     }
+
+}
 
 

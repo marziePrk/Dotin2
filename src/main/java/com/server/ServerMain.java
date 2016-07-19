@@ -66,13 +66,13 @@ public class ServerMain{
     {
         ServerSocket serverSocket;
         String path = "resources\\core.json";
+        Validation validation = new Validation();
 
-        JsonParserClass jsonParserClass = new JsonParserClass();
-        jsonParserClass.readJson(path);
+        validation.jsonParserClass.readJson(path);
         int port =getPort();
 
-                serverSocket = new ServerSocket(port);
-                serverSocket.setSoTimeout(10000);
+        serverSocket = new ServerSocket(port);
+        serverSocket.setSoTimeout(10000);
 
         while(true)
         {
@@ -86,8 +86,7 @@ public class ServerMain{
 
                 Transaction transaction = (Transaction) serverIn.readObject();
                 System.out.println(transaction);
-                Validation validation = new Validation();
-                validation.checkRequest(transaction);
+                validation.findRequestId(transaction);
 
 
                 ObjectOutputStream serverOut = new ObjectOutputStream(server.getOutputStream());
@@ -107,7 +106,7 @@ public class ServerMain{
                 e.printStackTrace();
             }
         }
-        }
+    }
 
 
        /* try
@@ -121,4 +120,4 @@ public class ServerMain{
             System.out.print("Server main exception....");
             e.printStackTrace();
         }*/
-    }
+}
