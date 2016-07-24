@@ -10,7 +10,7 @@ public class Terminal
     private String serverIpAddress;
     private int portNumber;
     private String outLogPath;
-
+    private static Terminal terminal;
 
     //getter
     public String getTerminalId() {
@@ -33,6 +33,10 @@ public class Terminal
         return outLogPath;
     }
 
+    public static Terminal getTerminal() {
+        return terminal;
+    }
+
     //setter
     public void setTerminalId(String terminalId) {
         this.terminalId = terminalId;
@@ -44,7 +48,6 @@ public class Terminal
 
     public void setServerIpAddress(String serverIpAddress) {
         this.serverIpAddress = serverIpAddress;
-        System.out.println(this.serverIpAddress);
     }
 
     public void setPortNumber(int portNumber) {
@@ -55,5 +58,8 @@ public class Terminal
         this.outLogPath = outLogPath;
     }
 
+    public static void setTerminal(Terminal terminal) {
+        Terminal.terminal = terminal;
+    }
 
 }

@@ -14,17 +14,17 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
+
+import static com.client.Terminal.getTerminal;
+import static com.client.Terminal.setTerminal;
+import static com.client.Transaction.*;
 
 /**
  * Created by Dotin school 6 on 7/12/2016.
  */
 public class XmlReader
 {
-    Terminal terminal = new Terminal();
-    List<Transaction> transactionList = new ArrayList<Transaction>();
-
-    public  void readXml(String path) {
+    public static void readXml(String path) {
         try {
             File xmlFile = new File(path);
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -33,80 +33,63 @@ public class XmlReader
             //document.getDocumentElement().normalize();
 
             //.........................terminal...................................
+            setTerminal(new Terminal());
             NodeList nodeListTerminal = document.getElementsByTagName("terminal");
             Node nodeTerminal = nodeListTerminal.item(0);
-            System.out.println(nodeTerminal.getNodeName());
-            System.out.println("........................................");
             //is this necessary???
             if (nodeTerminal.getNodeType() == Node.ATTRIBUTE_NODE) {
                 NamedNodeMap terminalAttrs = nodeTerminal.getAttributes();
                 //set  terminal id
                 String terminalId = terminalAttrs.getNamedItem("id").getTextContent();
-                terminal.setTerminalId(terminalId);
-                System.out.println("Terminal Id= " + terminalId);
+                getTerminal().setTerminalId(terminalId);
                 //set terminal port
                 String terminalType = terminalAttrs.getNamedItem("type").getTextContent();
-                terminal.setTerminalType(terminalType);
-                System.out.println("Terminal Type= " + terminalType);
-                System.out.println("\n");
+                getTerminal().setTerminalType(terminalType);
             }
 
             //..............................server...........................
             NodeList nodeListServer = document.getElementsByTagName("server");
             Node nodeServer = nodeListServer.item(0);
-            System.out.println(nodeServer.getNodeName());
-            System.out.println("........................................");
             NamedNodeMap serverAttrs = nodeServer.getAttributes();
-            //set server port
-            int port = Integer.parseInt(serverAttrs.getNamedItem("port").getTextContent());
-            System.out.println("port = " + port);
-            terminal.setPortNumber(port);
-            //set server IP
+            //set server IP--------------------------------
             String serverIP = serverAttrs.getNamedItem("ip").getTextContent();
-            System.out.println("Server ip = " + serverIP);
-            terminal.setServerIpAddress(serverIP);
-            System.out.println("\n");
+            getTerminal().setServerIpAddress(serverIP);
+            //set server port------------------------------
+            int port = Integer.parseInt(serverAttrs.getNamedItem("port").getTextContent());
+            getTerminal().setPortNumber(port);
+
             //..............................outLog...........................
             NodeList nodeListOutLog = document.getElementsByTagName("outLog");
             Node nodeOutLog = nodeListOutLog.item(0);
-            System.out.println(nodeOutLog.getNodeName());
-            System.out.println("........................................");
             NamedNodeMap outLogAttrs = nodeOutLog.getAttributes();
+            //set outLog path------------------------------
             String outLogPath = outLogAttrs.getNamedItem("path").getTextContent();
-            System.out.println("path = " + outLogPath);
-            terminal.setOutLogPath(outLogPath);
-            System.out.println("\n");
+            getTerminal().setOutLogPath(outLogPath);
+
             //............................transaction................................
+            setTransactionList(new ArrayList<Transaction>());
             NodeList nodeListTransaction = document.getElementsByTagName("transaction");
             for (int counter = 0; counter < nodeListTransaction.getLength(); counter++) {
-                Transaction transaction = new Transaction();
+                setTransaction(new Transaction());
                 Node nodeTransaction = nodeListTransaction.item(counter);
-                System.out.println(nodeTransaction.getNodeName());
-                System.out.println("........................................");
                 NamedNodeMap transactionAttrs = nodeTransaction.getAttributes();
-                //set transaction Id
+                //set transaction Id-------------------------
                 String transactionId = transactionAttrs.getNamedItem("id").getTextContent();
-                System.out.println("id= " + transactionId);
-                transaction.setTransactionId(transactionId);
-                //set transaction type
+                getTransaction().setTransactionId(transactionId);
+                //set transaction type------------------------
                 String transactionType = transactionAttrs.getNamedItem("type").getTextContent();
-                System.out.println("type= " + transactionType);
-                transaction.setTransactionType(transactionType);
-                //set transaction amount
+                getTransaction().setTransactionType(transactionType);
+                //set transaction amount----------------------
                 BigDecimal transactionAmount = new BigDecimal((transactionAttrs.getNamedItem("amount").getTextContent().replaceAll(",", "")));
-                System.out.println("amount= " + transactionAmount);
-                transaction.setTransactionAmount(transactionAmount);
-                //set transaction deposit Id
+                getTransaction().setTransactionAmount(transactionAmount);
+                //set transaction deposit Id------------------
                 String depositId = transactionAttrs.getNamedItem("deposit").getTextContent();
-                System.out.println("deposit= " + depositId);
-                transaction.setDepositId(depositId);
-                System.out.println("\n");
-                transactionList.add(transaction);
+                getTransaction().setDepositId(depositId);
+
+                //add to transaction list
+                getTransactionList().add(getTransaction());
             }
-            System.out.println(transactionList.size());
-            System.out.println(transactionList.get(0).getTransactionType());
-            System.out.println(transactionList.get(1).getTransactionType());
-            //System.out.println(terminal.getPortNumber());
+
         }catch(ParserConfigurationException e){
             e.printStackTrace();
         }catch(SAXException e){

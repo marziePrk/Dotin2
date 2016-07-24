@@ -3,6 +3,7 @@ package com.client;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by Dotin school 6 on 7/12/2016.
@@ -12,8 +13,12 @@ public class Transaction implements Serializable {
     private String transactionType;
     private BigDecimal transactionAmount;
     private String depositId;
+    private static Transaction transaction;
+    //????????
+    private static List<Transaction> transactionList;
 
-    //getter
+
+    //getter-----------------------------------------------
     public String getTransactionId() {
         return transactionId;
     }
@@ -30,7 +35,15 @@ public class Transaction implements Serializable {
         return depositId;
     }
 
-    //setter
+    public static List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public static Transaction getTransaction() {
+        return transaction;
+    }
+
+    //setter--------------------------------------------------------------------------------
     public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
     }
@@ -45,5 +58,18 @@ public class Transaction implements Serializable {
 
     public void setDepositId(String depositId) {
         this.depositId = depositId;
+    }
+
+    public static void setTransactionList(List<Transaction> transactionList) {
+        Transaction.transactionList = transactionList;
+    }
+
+    public static void setTransaction(Transaction transaction) {
+        Transaction.transaction = transaction;
+    }
+
+    @Override
+    public String toString() {
+        return transactionId + transactionType + transactionAmount + depositId;
     }
 }

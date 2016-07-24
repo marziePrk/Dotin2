@@ -3,68 +3,57 @@ package com.server;
 import com.client.Transaction;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by Dotin school 6 on 7/18/2016.
  */
 public class Validation {
-    JsonParserClass jsonParserClass;
+    JsonParser jsonParser = new JsonParser();
+    List<Deposit> depositList = jsonParser.readDepositsInfo("resources\\core.json");
 
-    public Validation() {
-        jsonParserClass = new JsonParserClass();
-    }
+    public Deposit findAccount(Transaction transaction) {
 
-    public void findRequestId(Transaction request) {
-        //check accuracy of transaction values
-        if (checkTransactionValue(request)) {
-            for (int counter = 0; counter < jsonParserClass.depositList.size(); counter++) {
-                System.out.println("Validation is running.....");
-                Deposit deposit = jsonParserClass.depositList.get(counter);
-                if (deposit.getCustomerId().equals(request.getDepositId())) {
-                    System.out.println("I find customer....");
-                    //call deposit or withdraw
-                    if (request.getTransactionType().equals("withdraw")) {
-                        withdraw(request,deposit);
-                        System.out.println("customer id ="+deposit.getCustomerId()+" new initial balance =" + deposit.getInitialBalance());
-
-                    }else if (request.getTransactionType().equals("deposit")){
-                        deposit(request,deposit);
-                        System.out.println("customer id ="+deposit.getCustomerId()+" new initial balance =" + deposit.getInitialBalance());
-
-                    }
+        for (int counter = 0; counter < depositList.size(); counter++) {
+            Deposit deposit = depositList.get(counter);
+            if (deposit.getCustomerId().equals(transaction.getDepositId())) {
+                return deposit;
+            }
 
                 /* //reflection method invocation
                     Object validation = Validation.class.newInstance();
-                    Method method =validation.getClass().getDeclaredMethod(request.getTransactionType(),Transaction.class,Deposit.class);
-                    method.invoke(validation ,request ,deposit);
+                    Method method =validation.getClass().getDeclaredMethod(transaction.getTransactionType(),Transaction.class,Deposit.class);
+                    method.invoke(validation ,transaction ,deposit);
                     */
-                } else
-                    System.out.println("Invalid this customer id!!");
+        }
+        return  null;
+    }
+
+    public Response requestProcessing(Transaction request, Deposit deposit) {
+        Response response = null;
+        String success = "Operation was successful";
+        String fail = "Operation was unsuccessful";
+      if (request.getTransactionType().equals("deposit")) {
+            BigDecimal initialBalance = deposit.getInitialBalance().add(request.getTransactionAmount());
+            if (initialBalance.compareTo(deposit.getUpperBound()) < 0) {
+                deposit.doDeposit(request, deposit);
+                response = new Response(request.getTransactionId(), deposit.getInitialBalance(), success, request.getTransactionType());
+            }else {
+                response = new Response(request.getDepositId(), deposit.getInitialBalance(), fail, request.getTransactionType());
             }
+
+        } else if (request.getTransactionType().equals("withdraw")) {
+            if (deposit.getInitialBalance().compareTo(request.getTransactionAmount()) > 0) {
+                deposit.doWithdraw(request, deposit);
+                response = new Response(request.getTransactionId(), deposit.getInitialBalance(), success, request.getTransactionType());
+            } else
+                response = new Response(request.getTransactionId(), deposit.getInitialBalance(), fail, request.getTransactionType());
         }
+        return response;
     }
-
-    public void withdraw(Transaction transaction, Deposit deposit) {
-        System.out.println("I am withdraw");
-        if (deposit.getInitialBalance().compareTo(transaction.getTransactionAmount()) < 0) {
-            System.out.println("Withdraw operation is not possible.");
-        } else {
-            BigDecimal newInitialBalance = deposit.getInitialBalance().subtract(transaction.getTransactionAmount());
-            deposit.setInitialBalance(newInitialBalance);
-        }
-    }
-
-    public void deposit(Transaction transaction, Deposit deposit) {
-        System.out.println("I am deposit");
-        BigDecimal newInitialBalance = deposit.getInitialBalance().add(transaction.getTransactionAmount());
-        System.out.println(newInitialBalance);
-        if(newInitialBalance.compareTo(deposit.getUpperBound()) > 0){
-            deposit.setInitialBalance(newInitialBalance);
-        }else System.out.println("Deposit operation in not possible!");
-    }
-
-    public boolean checkTransactionValue(Transaction transaction) {
-       /* if (transaction.getTransactionId() > 0)
+}
+  /*  public boolean checkTransactionValue(Transaction transaction) {
+        if (transaction.getTransactionId() > 0)
         {
             if (transaction.getTransactionType().equals("deposit") || transaction.getTransactionType().equals("withdraw"))
             {
@@ -82,7 +71,5 @@ public class Validation {
         }else
             System.out.println("Negative transaction id!");
 
-        return false;*/
-        return true;
-    }
-}
+        return false;
+    }*/

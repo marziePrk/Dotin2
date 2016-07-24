@@ -9,7 +9,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-import static com.server.JsonParserClass.getPort;
+import static com.server.JsonParser.readServerInfo;
+
 
 /**
  * Created by Dotin school 6 on 7/10/2016.
@@ -59,48 +60,45 @@ import static com.server.JsonParserClass.getPort;
         }
     }*/
 
-public class ServerMain{
+public class ServerMain {
+    public static final String path = "resources\\core.json";
 
     //Server Main
-    public static void main(String [] args) throws IOException
-    {
+    public static void main(String[] args) throws IOException {
         ServerSocket serverSocket;
-        String path = "resources\\core.json";
         Validation validation = new Validation();
 
-        validation.jsonParserClass.readJson(path);
-        int port =getPort();
+        int port = readServerInfo(path).getPort();
+
 
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(10000);
 
-        while(true)
-        {
-            try
-            {
+        while (true) {
+            try {
+                //get connection----------------------------------------------------------------
                 System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
                 Socket server = serverSocket.accept();
-                System.out.println("Just connected to "+ server.getRemoteSocketAddress());
+                System.out.println("Just connected to " + server.getRemoteSocketAddress());
+
+                //receive client request-----------------------------------------------------
                 ObjectInputStream serverIn = new ObjectInputStream(server.getInputStream());
-                //System.out.println(serverIn.readObject());
-
                 Transaction transaction = (Transaction) serverIn.readObject();
-                System.out.println(transaction);
-                validation.findRequestId(transaction);
 
+                Deposit requestResult = validation.findAccount(transaction);
+                Response serverResponse = validation.requestProcessing(transaction, requestResult);
 
+                //send response--------------------------------------------------------------
                 ObjectOutputStream serverOut = new ObjectOutputStream(server.getOutputStream());
-                serverOut.writeObject("Thank you for connecting to " + server.getLocalSocketAddress() + "\nGoodbye!");
+                serverOut.writeObject(serverResponse);
                 server.close();
-            }catch(SocketTimeoutException s)
-            {
+            } catch (SocketTimeoutException s) {
                 System.out.println("Socket timed out!");
-                break;
-            }catch(IOException e)
-            {
+
+            } catch (IOException e) {
                 System.out.println("I am IO Exception in serverMain");
                 e.printStackTrace();
-                break;
+
             } catch (ClassNotFoundException e) {
                 System.out.println("I am ClassNotFound exception in serverMain ");
                 e.printStackTrace();
