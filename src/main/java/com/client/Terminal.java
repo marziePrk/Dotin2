@@ -1,5 +1,7 @@
 package com.client;
 
+import java.util.List;
+
 /**
  * Created by Dotin school 6 on 7/12/2016.
  */
@@ -10,7 +12,7 @@ public class Terminal
     private String serverIpAddress;
     private int portNumber;
     private String outLogPath;
-    private static Terminal terminal;
+    private List<Transaction> transactions;
 
     //getter
     public String getTerminalId() {
@@ -33,9 +35,10 @@ public class Terminal
         return outLogPath;
     }
 
-    public static Terminal getTerminal() {
-        return terminal;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
+
 
     //setter
     public void setTerminalId(String terminalId) {
@@ -58,8 +61,8 @@ public class Terminal
         this.outLogPath = outLogPath;
     }
 
-    public static void setTerminal(Terminal terminal) {
-        Terminal.terminal = terminal;
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
 }

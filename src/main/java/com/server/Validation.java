@@ -1,15 +1,10 @@
 package com.server;
 
-import com.client.Transaction;
-
-import java.math.BigDecimal;
-import java.util.List;
-
 /**
  * Created by Dotin school 6 on 7/18/2016.
  */
 public class Validation {
-    JsonParser jsonParser = new JsonParser();
+   /* JsonParser jsonParser = new JsonParser();
     List<Deposit> depositList = jsonParser.readDepositsInfo("resources\\core.json");
 
     public Deposit findAccount(Transaction transaction) {
@@ -20,16 +15,16 @@ public class Validation {
                 return deposit;
             }
 
-                /* //reflection method invocation
+                *//* //reflection method invocation
                     Object validation = Validation.class.newInstance();
                     Method method =validation.getClass().getDeclaredMethod(transaction.getTransactionType(),Transaction.class,Deposit.class);
                     method.invoke(validation ,transaction ,deposit);
-                    */
+                    *//*
         }
         return  null;
-    }
+    }*/
 
-    public Response requestProcessing(Transaction request, Deposit deposit) {
+   /* public Response requestProcessing(Transaction request, Deposit deposit) {
         Response response = null;
         String success = "Operation was successful";
         String fail = "Operation was unsuccessful";
@@ -50,7 +45,7 @@ public class Validation {
                 response = new Response(request.getTransactionId(), deposit.getInitialBalance(), fail, request.getTransactionType());
         }
         return response;
-    }
+    }*/
 }
   /*  public boolean checkTransactionValue(Transaction transaction) {
         if (transaction.getTransactionId() > 0)

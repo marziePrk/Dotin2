@@ -1,4 +1,4 @@
-package com.com.exception;
+package com.exception;
 
 /**
  * Created by Dotin school 6 on 7/23/2016.

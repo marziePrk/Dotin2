@@ -1,6 +1,7 @@
 package com.server;
 
 import com.client.Transaction;
+import com.exception.UnAuthorizedRequestException;
 
 import java.math.BigDecimal;
 
@@ -54,17 +55,25 @@ public class Deposit{
     }
 
     //withdraw from bank account-----------------------------------
-    public BigDecimal doWithdraw(Transaction transaction, Deposit deposit) {
-        System.out.println("I am withdraw");
-        setInitialBalance(deposit.getInitialBalance().subtract(transaction.getTransactionAmount()));
-        System.out.println(getInitialBalance());
+    public BigDecimal doWithdraw(Transaction transaction) throws UnAuthorizedRequestException {
+        if (initialBalance.compareTo(transaction.getTransactionAmount()) >= 0){
+           this.initialBalance = initialBalance.subtract(transaction.getTransactionAmount());
+        }
+        if (initialBalance.compareTo(transaction.getTransactionAmount()) < 0){
+            throw new UnAuthorizedRequestException("This initial Balance is not enough.");
+        }
         return getInitialBalance();
     }
 
     //Deposit Account-----------------------------------------------
-    public BigDecimal doDeposit(Transaction transaction, Deposit deposit) {
-        setInitialBalance(deposit.getInitialBalance().add(transaction.getTransactionAmount()));
-        System.out.println(getInitialBalance());
+    public BigDecimal doDeposit(Transaction transaction) throws UnAuthorizedRequestException {
+        BigDecimal newInitialBalance = getInitialBalance().add(transaction.getTransactionAmount());
+        if (newInitialBalance.compareTo(upperBound) <= 0){
+            this.initialBalance = newInitialBalance;
+        }
+        if (newInitialBalance.compareTo(upperBound) > 0){
+            throw new UnAuthorizedRequestException("You pass the upperBound.");
+        }
         return getInitialBalance();
 
     }

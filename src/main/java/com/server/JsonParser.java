@@ -17,8 +17,8 @@ import java.util.List;
  * Created by Dotin school 6 on 7/17/2016.
  */
 public class JsonParser {
-    public static Server readServerInfo(String path) {
-        Server server = new Server();
+    public static ServerInformation readServerInfo(String path) {
+        ServerInformation server = new ServerInformation();
         try {
             FileReader jsonFile = new FileReader(path);
             JSONParser jsonParser = new JSONParser();
@@ -39,7 +39,7 @@ public class JsonParser {
         return server;
     }
 
-    public  List<Deposit> readDepositsInfo(String path) {
+    public static List<Deposit> readDepositsInfo(String path) {
         List<Deposit> depositList = new ArrayList<Deposit>();
         try {
             FileReader jsonFile = new FileReader(path);

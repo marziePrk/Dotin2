@@ -15,16 +15,13 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import static com.client.Terminal.getTerminal;
-import static com.client.Terminal.setTerminal;
-import static com.client.Transaction.*;
-
 /**
  * Created by Dotin school 6 on 7/12/2016.
  */
-public class XmlReader
+public class XmlParser
 {
-    public static void readXml(String path) {
+    public static Terminal parseXml(String path) {
+        Terminal terminal = new Terminal();
         try {
             File xmlFile = new File(path);
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -33,7 +30,6 @@ public class XmlReader
             //document.getDocumentElement().normalize();
 
             //.........................terminal...................................
-            setTerminal(new Terminal());
             NodeList nodeListTerminal = document.getElementsByTagName("terminal");
             Node nodeTerminal = nodeListTerminal.item(0);
             //is this necessary???
@@ -41,11 +37,11 @@ public class XmlReader
                 NamedNodeMap terminalAttrs = nodeTerminal.getAttributes();
                 //set  terminal id
                 String terminalId = terminalAttrs.getNamedItem("id").getTextContent();
-                getTerminal().setTerminalId(terminalId);
+                terminal.setTerminalId(terminalId);
                 //set terminal port
                 String terminalType = terminalAttrs.getNamedItem("type").getTextContent();
-                getTerminal().setTerminalType(terminalType);
-            }
+                terminal.setTerminalType(terminalType);
+        }
 
             //..............................server...........................
             NodeList nodeListServer = document.getElementsByTagName("server");
@@ -53,10 +49,10 @@ public class XmlReader
             NamedNodeMap serverAttrs = nodeServer.getAttributes();
             //set server IP--------------------------------
             String serverIP = serverAttrs.getNamedItem("ip").getTextContent();
-            getTerminal().setServerIpAddress(serverIP);
+            terminal.setServerIpAddress(serverIP);
             //set server port------------------------------
             int port = Integer.parseInt(serverAttrs.getNamedItem("port").getTextContent());
-            getTerminal().setPortNumber(port);
+            terminal.setPortNumber(port);
 
             //..............................outLog...........................
             NodeList nodeListOutLog = document.getElementsByTagName("outLog");
@@ -64,31 +60,33 @@ public class XmlReader
             NamedNodeMap outLogAttrs = nodeOutLog.getAttributes();
             //set outLog path------------------------------
             String outLogPath = outLogAttrs.getNamedItem("path").getTextContent();
-            getTerminal().setOutLogPath(outLogPath);
+            terminal.setOutLogPath(outLogPath);
 
             //............................transaction................................
-            setTransactionList(new ArrayList<Transaction>());
+            ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
             NodeList nodeListTransaction = document.getElementsByTagName("transaction");
             for (int counter = 0; counter < nodeListTransaction.getLength(); counter++) {
-                setTransaction(new Transaction());
+                Transaction transaction = new Transaction();
                 Node nodeTransaction = nodeListTransaction.item(counter);
                 NamedNodeMap transactionAttrs = nodeTransaction.getAttributes();
                 //set transaction Id-------------------------
                 String transactionId = transactionAttrs.getNamedItem("id").getTextContent();
-                getTransaction().setTransactionId(transactionId);
+                transaction.setTransactionId(transactionId);
                 //set transaction type------------------------
                 String transactionType = transactionAttrs.getNamedItem("type").getTextContent();
-                getTransaction().setTransactionType(transactionType);
+                transaction.setTransactionType(transactionType);
                 //set transaction amount----------------------
                 BigDecimal transactionAmount = new BigDecimal((transactionAttrs.getNamedItem("amount").getTextContent().replaceAll(",", "")));
-                getTransaction().setTransactionAmount(transactionAmount);
+                transaction.setTransactionAmount(transactionAmount);
                 //set transaction deposit Id------------------
                 String depositId = transactionAttrs.getNamedItem("deposit").getTextContent();
-                getTransaction().setDepositId(depositId);
+                transaction.setDepositId(depositId);
 
                 //add to transaction list
-                getTransactionList().add(getTransaction());
+                transactionList.add(transaction);
+                //set terminal transaction list.
             }
+            terminal.setTransactions(transactionList);
 
         }catch(ParserConfigurationException e){
             e.printStackTrace();
@@ -97,6 +95,7 @@ public class XmlReader
         }catch(IOException e){
             e.printStackTrace();
         }
+        return terminal;
     }
 
 }
