@@ -25,51 +25,50 @@ public class ServerMainMultiThread extends Thread {
     ObjectInputStream serverIn;
     ObjectOutputStream serverOut;
     Response serverResponse;
+    Socket server;
+    List<Deposit> depositList;
 
 
-    public ServerMainMultiThread() throws IOException {
-        ServerInformation serverInfo = readServerInfo(jsonPath);
-        int port = serverInfo.getPort();
-        serverSocket = new ServerSocket(port);
+
+    public ServerMainMultiThread(Socket server , List<Deposit> depositList ) throws IOException {
+        this.server = server;
+        this.depositList = depositList;
+
         //serverSocket.setSoTimeout(10000);
     }
 
     public void run() {
-        List<Deposit> depositList = readDepositsInfo(jsonPath);
-        while (true) {
-            try {
-                System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
-                Socket server = serverSocket.accept();
-                //get connection...........................................................
-                System.out.println("Just connected to " + server.getRemoteSocketAddress());
 
-                //receive client request..................................
-                serverIn = new ObjectInputStream(server.getInputStream());
-                Transaction transaction = (Transaction) serverIn.readObject();
+        try {
 
-                //condition out of the loop................................
-                if (transaction == null)
-                    break;
 
-                //check request validation.................................
-                serverResponse = checkValidation(transaction, depositList);
+            //receive client request..................................
+            serverIn = new ObjectInputStream(server.getInputStream());
+            Transaction transaction = (Transaction) serverIn.readObject();
 
-                //send response.............................................
-                //OutputStream outputStream = server.getOutputStream();
-                serverOut = new ObjectOutputStream(server.getOutputStream());
-                serverOut.writeObject(serverResponse);
-                server.close();
+            //condition out of the loop................................
 
-            } catch (SocketTimeoutException s) {
-                System.out.println("Socket timed out!");
-                break;
-            } catch (IOException e) {
-                e.printStackTrace();
-                break;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+
+            //check request validation.................................
+            serverResponse = checkValidation(transaction, depositList);
+
+            //send response.............................................
+            //OutputStream outputStream = server.getOutputStream();
+            serverOut = new ObjectOutputStream(server.getOutputStream());
+            serverOut.writeObject(serverResponse);
+            server.close();
+
+        } catch (SocketTimeoutException s) {
+            System.out.println("Socket timed out!");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
+
+
     }
 
     public Response checkValidation(Transaction transaction, List<Deposit> depositList) {
@@ -105,10 +104,19 @@ public class ServerMainMultiThread extends Thread {
     }
 
     public static void main(String[] args) {
+        ServerInformation serverInfo = readServerInfo(jsonPath);
+        int port = serverInfo.getPort();
+        List<Deposit> depositList = readDepositsInfo(jsonPath);
 
         try {
-            Thread serverThread = new ServerMainMultiThread();
-            serverThread.start();
+            ServerSocket serverSocket = new ServerSocket(port);
+            while (true) {
+                System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
+                Socket server = serverSocket.accept();
+                Thread serverThread = new ServerMainMultiThread(server , depositList);
+                System.out.println("Just connected to " + server.getRemoteSocketAddress());
+                serverThread.start();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

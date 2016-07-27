@@ -55,7 +55,7 @@ public class Deposit{
     }
 
     //withdraw Operation-----------------------------------
-    public BigDecimal doWithdraw(Transaction transaction) throws InitialBalanceLimitationException {
+    public synchronized BigDecimal doWithdraw(Transaction transaction) throws InitialBalanceLimitationException {
         if (initialBalance.compareTo(transaction.getTransactionAmount()) >= 0){
            this.initialBalance = initialBalance.subtract(transaction.getTransactionAmount());
         }
@@ -66,10 +66,12 @@ public class Deposit{
     }
 
     //Deposit Operation-----------------------------------------------
-    public BigDecimal doDeposit(Transaction transaction) throws UpperBoundLimitationException {
+    public synchronized BigDecimal doDeposit(Transaction transaction) throws UpperBoundLimitationException {
         BigDecimal newInitialBalance = getInitialBalance().add(transaction.getTransactionAmount());
         if (newInitialBalance.compareTo(upperBound) <= 0){
-            this.initialBalance = newInitialBalance;
+            //System.out.println(getInitialBalance());
+            setInitialBalance(newInitialBalance);
+            //System.out.println(getInitialBalance());
         }
         if (newInitialBalance.compareTo(upperBound) > 0){
             throw new UpperBoundLimitationException("You pass the upperBound.");

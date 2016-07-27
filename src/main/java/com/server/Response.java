@@ -13,6 +13,7 @@ public class Response implements Serializable {
     private String newInitialBalance;
     private String responseMessage;
     private String transactionType;
+    private String terminalId;
 
     //Constructor for unsuccessful operation..........................................
     public Response(String responseMessage) {
@@ -29,6 +30,7 @@ public class Response implements Serializable {
         this.newInitialBalance = String.valueOf(newBalance);
         this.responseMessage = "The operation was successful.";
         this.transactionType = transaction.getTransactionType();
+        this.terminalId = transaction.getTerminalId();
     }
 
     //getter............................................
@@ -48,6 +50,10 @@ public class Response implements Serializable {
         return transactionType;
     }
 
+    public String getTerminalId() {
+        return terminalId;
+    }
+
     //setter.....................................................................
     public void setResponseId(String responseId) {
         this.responseId = responseId;
@@ -65,12 +71,18 @@ public class Response implements Serializable {
         this.transactionType = transactionType;
     }
 
+    public void setTerminalId(String terminalId) {
+        this.terminalId = terminalId;
+    }
+
+    //toString........................................................
     @Override
     public String toString() {
         return "responseId : " + responseId +
                 "  newBalance : " + newInitialBalance +
                 "  response Message :" + responseMessage +
-                "  transactionType :" + transactionType;
+                "  transactionType :" + transactionType +
+                "  terminal id :" + terminalId;
     }
 
     /* public Response makeSuccessfulResponse(Transaction transaction , BigDecimal newBalance){

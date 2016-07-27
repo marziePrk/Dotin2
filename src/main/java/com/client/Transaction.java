@@ -12,6 +12,8 @@ public class Transaction implements Serializable {
     private String transactionType;
     private BigDecimal transactionAmount;
     private String depositId;
+    //????????
+    private String terminalId;
 
 
     //getter.................................................
@@ -31,6 +33,9 @@ public class Transaction implements Serializable {
         return depositId;
     }
 
+    public String getTerminalId() {
+        return terminalId;
+    }
 
     //setter..................................................................................
     public void setTransactionId(String transactionId) {
@@ -49,6 +54,9 @@ public class Transaction implements Serializable {
         this.depositId = depositId;
     }
 
+    public void setTerminalId(String terminalId) {
+        this.terminalId = terminalId;
+    }
 
     @Override
     public String toString() {

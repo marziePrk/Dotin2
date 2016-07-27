@@ -34,17 +34,17 @@ import static com.server.JsonParser.readServerInfo;
             try
             {
                 System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
-                Socket server = serverSocket.accept();
-                System.out.println("Just connected to "+ server.getRemoteSocketAddress());
-                ObjectInputStream serverIn = new ObjectInputStream(server.getInputStream());
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Just connected to "+ clientSocket.getRemoteSocketAddress());
+                ObjectInputStream serverIn = new ObjectInputStream(clientSocket.getInputStream());
                 System.out.println(serverIn.readObject());
                 Transaction transaction = (Transaction) serverIn.readObject();
                 Validation validation = new Validation(transaction);
                 validation.setMessage();
                 //validation.checkRequest(transaction);
-                ObjectOutputStream serverOut = new ObjectOutputStream(server.getOutputStream());
-                serverOut.writeObject("Thank you for connecting to " + server.getLocalSocketAddress() + "\nGoodbye!");
-                server.close();
+                ObjectOutputStream serverOut = new ObjectOutputStream(clientSocket.getOutputStream());
+                serverOut.writeObject("Thank you for connecting to " + clientSocket.getLocalSocketAddress() + "\nGoodbye!");
+                clientSocket.close();
             }catch(SocketTimeoutException s)
             {
                 System.out.println("Socket timed out!");
@@ -116,7 +116,7 @@ public class ServerMain {
             for (Deposit deposit : depositList) {
                 if (deposit.getCustomerId().equals(transaction.getDepositId())) {
                     BigDecimal newBalance = null;
-                    checkCustomerExist = true;
+                    //checkCustomerExist = true;
                     if (transaction.getTransactionType().equals("deposit")) {
                         newBalance = deposit.doDeposit(transaction);
                         System.out.println(newBalance);
@@ -128,11 +128,11 @@ public class ServerMain {
                     }
                 }
             }
-            if (!checkCustomerExist) {
+           /* if (!checkCustomerExist) {
                 serverResponse = new Response("Server can not matched id.");
                 //response.makeInvalidCustomerException("can not matched id.");
                 System.out.println(serverResponse);
-            }
+            }*/
         }
         catch (InitialBalanceLimitationException e) {
             e.printStackTrace();
