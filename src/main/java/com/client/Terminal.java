@@ -14,7 +14,7 @@ public class Terminal
     private String outLogPath;
     private List<Transaction> transactions;
 
-    //getter
+    //getter...........................................
     public String getTerminalId() {
         return terminalId;
     }
@@ -40,7 +40,7 @@ public class Terminal
     }
 
 
-    //setter
+    //setter.....................................................................
     public void setTerminalId(String terminalId) {
         this.terminalId = terminalId;
     }

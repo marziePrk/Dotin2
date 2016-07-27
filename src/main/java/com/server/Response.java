@@ -1,7 +1,6 @@
 package com.server;
 
 import com.client.Transaction;
-import com.exception.InvalidCustomerException;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,48 +10,33 @@ import java.math.BigDecimal;
  */
 public class Response implements Serializable {
     private String responseId;
-    private BigDecimal newInitialBalance;
+    private String newInitialBalance;
     private String responseMessage;
     private String transactionType;
-    private Response response;
 
-
-
-    public Response( String responseMessage) {
+    //Constructor for unsuccessful operation..........................................
+    public Response(String responseMessage) {
         this.responseMessage = responseMessage;
     }
 
-    public Response() {
+    //default Constructor...........................................
+    public Response() {    }
 
-    }
+    //Constructor for successful operation..........................
+    public Response(Transaction transaction, BigDecimal newBalance) {
 
-
-    public Response(Transaction transaction , BigDecimal newBalance){
-
-            this.responseId =transaction.getTransactionId();
-            this.newInitialBalance = newBalance;
-            this.responseMessage = "The operation was successful.";
-            this.transactionType = transaction.getTransactionType();
-    }
-    public Response makeSuccessfulResponse(Transaction transaction , BigDecimal newBalance){
-        this.responseId =transaction.getTransactionId();
-        this.newInitialBalance = newBalance;
+        this.responseId = transaction.getTransactionId();
+        this.newInitialBalance = String.valueOf(newBalance);
         this.responseMessage = "The operation was successful.";
         this.transactionType = transaction.getTransactionType();
-        return response;
-
-    }
-    public void makeInvalidCustomerException(String responseMessage) throws InvalidCustomerException {
-       throw new InvalidCustomerException(responseMessage);
     }
 
-
-    //getter------------------------------------
+    //getter............................................
     public String getResponseId() {
         return responseId;
     }
 
-    public BigDecimal getNewBalance() {
+    public String getNewBalance() {
         return newInitialBalance;
     }
 
@@ -64,16 +48,12 @@ public class Response implements Serializable {
         return transactionType;
     }
 
-    public Response getResponse() {
-        return response;
-    }
-
-    //setter------------------------------------
+    //setter.....................................................................
     public void setResponseId(String responseId) {
         this.responseId = responseId;
     }
 
-    public void setNewBalance(BigDecimal newBalance) {
+    public void setNewBalance(String newBalance) {
         this.newInitialBalance = newBalance;
     }
 
@@ -85,15 +65,24 @@ public class Response implements Serializable {
         this.transactionType = transactionType;
     }
 
-    public void setResponse(Response response) {
-        this.response = response;
-    }
-
     @Override
     public String toString() {
-        return "responseId : " +responseId +
-                "  newBalance : " +newInitialBalance +
-                "  response Message :"+responseMessage +
-                "  transactionType :"+ transactionType;
+        return "responseId : " + responseId +
+                "  newBalance : " + newInitialBalance +
+                "  response Message :" + responseMessage +
+                "  transactionType :" + transactionType;
     }
+
+    /* public Response makeSuccessfulResponse(Transaction transaction , BigDecimal newBalance){
+         this.responseId =transaction.getTransactionId();
+         this.newInitialBalance = newBalance;
+         this.responseMessage = "The operation was successful.";
+         this.transactionType = transaction.getTransactionType();
+         return response;
+
+     }*/
+   /* public void makeInvalidCustomerException(String responseMessage) throws InvalidCustomerException {
+       throw new InvalidCustomerException(responseMessage);
+    }*/
+
 }

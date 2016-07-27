@@ -14,7 +14,7 @@ public class Transaction implements Serializable {
     private String depositId;
 
 
-    //getter-----------------------------------------------
+    //getter.................................................
     public String getTransactionId() {
         return transactionId;
     }
@@ -32,7 +32,7 @@ public class Transaction implements Serializable {
     }
 
 
-    //setter--------------------------------------------------------------------------------
+    //setter..................................................................................
     public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
     }

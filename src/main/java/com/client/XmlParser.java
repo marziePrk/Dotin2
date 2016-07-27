@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 public class XmlParser
 {
-    public static Terminal parseXml(String path) {
+    public static Terminal readXml(String path) {
         Terminal terminal = new Terminal();
         try {
             File xmlFile = new File(path);

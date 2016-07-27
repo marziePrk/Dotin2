@@ -10,7 +10,7 @@ public class ServerInformation {
     private String outLog;
     private List<Deposit> deposits;
 
-    //getter
+    //getter............................
     public int getPort() {
         return port;
     }
@@ -24,7 +24,7 @@ public class ServerInformation {
     }
 
 
-    //setter
+    //setter.........................................
     public void setPort(int port) {
         this.port = port;
     }

@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class JsonParser {
     public static ServerInformation readServerInfo(String path) {
-        ServerInformation server = new ServerInformation();
+        ServerInformation serverInfo = new ServerInformation();
         try {
             FileReader jsonFile = new FileReader(path);
             JSONParser jsonParser = new JSONParser();
@@ -26,9 +26,10 @@ public class JsonParser {
 
             //..........................Server................................
             // set port
-            server.setPort(((Number) jsonFileObject.get("port")).intValue());
+            serverInfo.setPort(((Number) jsonFileObject.get("port")).intValue());
             //set outLog
-            server.setOutLog((String) jsonFileObject.get("outLog"));
+            serverInfo.setOutLog((String) jsonFileObject.get("outLog"));
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -36,7 +37,7 @@ public class JsonParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return server;
+        return serverInfo;
     }
 
     public static List<Deposit> readDepositsInfo(String path) {

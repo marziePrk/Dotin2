@@ -1,7 +1,8 @@
 package com.server;
 
 import com.client.Transaction;
-import com.exception.UnAuthorizedRequestException;
+import com.exception.InitialBalanceLimitationException;
+import com.exception.UpperBoundLimitationException;
 
 import java.math.BigDecimal;
 
@@ -16,7 +17,6 @@ public class Deposit{
 
 
     //getter-------------------------------------------------
-
     public String getCustomerId() {
         return customerId;
     }
@@ -54,27 +54,27 @@ public class Deposit{
         this.customer = customer;
     }
 
-    //withdraw from bank account-----------------------------------
-    public BigDecimal doWithdraw(Transaction transaction) throws UnAuthorizedRequestException {
+    //withdraw Operation-----------------------------------
+    public BigDecimal doWithdraw(Transaction transaction) throws InitialBalanceLimitationException {
         if (initialBalance.compareTo(transaction.getTransactionAmount()) >= 0){
            this.initialBalance = initialBalance.subtract(transaction.getTransactionAmount());
         }
         if (initialBalance.compareTo(transaction.getTransactionAmount()) < 0){
-            throw new UnAuthorizedRequestException("This initial Balance is not enough.");
+            throw new InitialBalanceLimitationException("This initial Balance is not enough.");
         }
-        return getInitialBalance();
+        return initialBalance;
     }
 
-    //Deposit Account-----------------------------------------------
-    public BigDecimal doDeposit(Transaction transaction) throws UnAuthorizedRequestException {
+    //Deposit Operation-----------------------------------------------
+    public BigDecimal doDeposit(Transaction transaction) throws UpperBoundLimitationException {
         BigDecimal newInitialBalance = getInitialBalance().add(transaction.getTransactionAmount());
         if (newInitialBalance.compareTo(upperBound) <= 0){
             this.initialBalance = newInitialBalance;
         }
         if (newInitialBalance.compareTo(upperBound) > 0){
-            throw new UnAuthorizedRequestException("You pass the upperBound.");
+            throw new UpperBoundLimitationException("You pass the upperBound.");
         }
-        return getInitialBalance();
+        return initialBalance;
 
     }
 
