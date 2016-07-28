@@ -21,7 +21,7 @@ import static com.server.JsonParser.readServerInfo;
  */
 public class ServerMainMultiThread extends Thread {
     public static final String jsonPath = "resources\\core.json";
-    ServerSocket serverSocket;
+    ServerInformation serverInfo;
     ObjectInputStream serverIn;
     ObjectOutputStream serverOut;
     Response serverResponse;
@@ -30,9 +30,10 @@ public class ServerMainMultiThread extends Thread {
 
 
 
-    public ServerMainMultiThread(Socket server , List<Deposit> depositList ) throws IOException {
+    public ServerMainMultiThread(Socket server, List<Deposit> depositList, ServerInformation serverInfo) throws IOException {
         this.server = server;
         this.depositList = depositList;
+        this.serverInfo = serverInfo;
 
         //serverSocket.setSoTimeout(10000);
     }
@@ -113,7 +114,7 @@ public class ServerMainMultiThread extends Thread {
             while (true) {
                 System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
                 Socket server = serverSocket.accept();
-                Thread serverThread = new ServerMainMultiThread(server , depositList);
+                Thread serverThread = new ServerMainMultiThread(server , depositList , serverInfo);
                 System.out.println("Just connected to " + server.getRemoteSocketAddress());
                 serverThread.start();
             }

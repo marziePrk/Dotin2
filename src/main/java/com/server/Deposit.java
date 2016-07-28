@@ -70,8 +70,8 @@ public class Deposit{
         BigDecimal newInitialBalance = getInitialBalance().add(transaction.getTransactionAmount());
         if (newInitialBalance.compareTo(upperBound) <= 0){
             //System.out.println(getInitialBalance());
-            setInitialBalance(newInitialBalance);
-            //System.out.println(getInitialBalance());
+            this.initialBalance = newInitialBalance;
+            // System.out.println(getInitialBalance());
         }
         if (newInitialBalance.compareTo(upperBound) > 0){
             throw new UpperBoundLimitationException("You pass the upperBound.");
