@@ -56,6 +56,10 @@ public class Response implements Serializable {
         return terminalId;
     }
 
+    public String getCustomerId() {
+        return customerId;
+    }
+
     //setter.....................................................................
     public void setResponseId(String responseId) {
         this.responseId = responseId;
@@ -75,6 +79,10 @@ public class Response implements Serializable {
 
     public void setTerminalId(String terminalId) {
         this.terminalId = terminalId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     //toString........................................................

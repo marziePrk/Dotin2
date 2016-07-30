@@ -4,20 +4,10 @@
     <transactions>
 
         <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-        <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-        <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-        <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-        <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-        <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-        <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-        <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-        <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-        <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-        <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-        <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-        <transaction id="1" type="deposit" amount="5,00" deposit="33227781"/>
-
-
+        <transaction id="2" type="deposit" amount="5,00" deposit="33227781"/>
+        <transaction id="3" type="deposit" amount="5,00" deposit="33227781"/>
+        <transaction id="4" type="deposit" amount="5,00" deposit="33227781"/>
+        <transaction id="5" type="deposit" amount="5,00" deposit="33227781"/>
 
     </transactions>
 </terminal>

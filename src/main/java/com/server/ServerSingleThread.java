@@ -19,47 +19,8 @@ import static com.server.JsonParser.readServerInfo;
 /**
  * Created by Dotin school 6 on 7/10/2016.
  */
-/*public class ServerMain extends Thread
-{
-    private ServerSocket serverSocket;
-    public ServerMain(int port) throws IOException
-    {
-        serverSocket = new ServerSocket(port);
-        serverSocket.setSoTimeout(10000);
-    }
-    public void run()
-    {
-        while(true)
-        {
-            try
-            {
-                System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("Just connected to "+ clientSocket.getRemoteSocketAddress());
-                ObjectInputStream serverIn = new ObjectInputStream(clientSocket.getInputStream());
-                System.out.println(serverIn.readObject());
-                Transaction transaction = (Transaction) serverIn.readObject();
-                Validation validation = new Validation(transaction);
-                validation.setMessage();
-                //validation.checkRequest(transaction);
-                ObjectOutputStream serverOut = new ObjectOutputStream(clientSocket.getOutputStream());
-                serverOut.writeObject("Thank you for connecting to " + clientSocket.getLocalSocketAddress() + "\nGoodbye!");
-                clientSocket.close();
-            }catch(SocketTimeoutException s)
-            {
-                System.out.println("Socket timed out!");
-                break;
-            }catch(IOException e)
-            {
-                e.printStackTrace();
-                break;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
 
-public class ServerMain {
+public class ServerSingleThread {
     public static final String path = "resources\\core.json";
     public static Response serverResponse;
 

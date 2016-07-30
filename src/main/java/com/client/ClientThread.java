@@ -1,57 +1,65 @@
 package com.client;
 
 import com.server.Response;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.*;
 
-import static com.client.XmlParser.readXml;
+import static com.client.XmlManager.readXml;
+import static com.client.XmlManager.writeXml;
 
 /**
  * Created by Dotin school 6 on 7/10/2016.
  */
-public class ClientTread extends Thread{
+public class ClientThread extends Thread{
+    private final Logger logger=  Logger.getLogger(ClientThread.class.getName());
+    Terminal terminal;
 
-    String inputFilePath;
-    public static String outputFilePath = "resources\\response.xml";
+    //Handler fileHandler;
+    //SimpleFormatter simpleFormatter;
 
-    public ClientTread(String inputFilePath){
-        this.inputFilePath = inputFilePath;
+    public ClientThread(String inputFilePath) throws IOException {
+        terminal = readXml(inputFilePath);
+        Handler fileHandler = new FileHandler("resources\\"+terminal.getOutLogPath());
+        SimpleFormatter simpleFormatter = new SimpleFormatter();
+        logger.addHandler(fileHandler);
+        logger.setLevel(Level.INFO);
+        fileHandler.setFormatter(simpleFormatter);
     }
 
     public  void run() {
-        Terminal terminal = readXml(inputFilePath);
+
+       /* Handler fileHandler = new FileHandler(terminal.getOutLogPath());
+        SimpleFormatter simpleFormatter=  new SimpleFormatter();
+        logger.addHandler(fileHandler);
+        logger.setLevel(Level.INFO);
+        fileHandler.setFormatter(simpleFormatter);*/
+
+        logger.info("Start terminal" + terminal.getTerminalId());
         String ipAddress = terminal.getServerIpAddress();
         int port = terminal.getPortNumber();
-        System.out.println("Connecting to " + ipAddress + " on port " + port);
         for (Transaction transaction : terminal.getTransactions()) {
+            //System.out.println("Connecting to " + ipAddress + " on port " + port);
+            logger.info("Connecting to " + ipAddress + " on port " + port);
             try {
-                System.out.println(terminal.getTerminalId());
                 Socket clientSocket = new Socket(ipAddress, port);
-                System.out.println("Just connected to " + clientSocket.getRemoteSocketAddress());
+                //System.out.println("Just connected to " + clientSocket.getRemoteSocketAddress());
+                logger.info("Just connected to " + clientSocket.getRemoteSocketAddress());
 
                 //send request-----------------------------------------------------------------------
                 ObjectOutputStream clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
                 clientOutput.writeObject(transaction);
+                logger.info("Send transaction " + transaction.getTransactionId() +"to server.");
 
                 //receive response-------------------------------------------------------------------
                 ObjectInputStream clientInput = new ObjectInputStream(clientSocket.getInputStream());
                 Response serverResponse = (Response) clientInput.readObject();
                 System.out.println("Server says " + serverResponse);
+                logger.info("Response of transaction" + transaction.getTransactionId() +" is received.Server say " + serverResponse.getResponseMessage());
+                writeXml(serverResponse);
                 clientSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -61,8 +69,9 @@ public class ClientTread extends Thread{
         }
     }
 
+
     //create output file----------------------
-    public static void createXmlFile(Response serverResponse) {
+   /* public static void createXmlFile(Response serverResponse) {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -84,7 +93,7 @@ public class ClientTread extends Thread{
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource domSource = new DOMSource(document);
-            StreamResult streamResult = new StreamResult(outputFilePath);
+            StreamResult streamResult = new StreamResult(new FileWriter(outputFilePath));
             transformer.transform(domSource, streamResult);
 
 
@@ -94,9 +103,11 @@ public class ClientTread extends Thread{
             e.printStackTrace();
         } catch (TransformerException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 
-    }
+    }*/
 }
 

@@ -1,15 +1,16 @@
 package com.client;
 
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import com.server.Response;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -18,7 +19,8 @@ import java.util.ArrayList;
 /**
  * Created by Dotin school 6 on 7/12/2016.
  */
-public class XmlParser {
+public class XmlManager {
+    //Parse input xml file........................
     public static Terminal readXml(String path) {
         Terminal terminal = new Terminal();
         try {
@@ -106,6 +108,65 @@ public class XmlParser {
         return terminal;
     }
 
+    //Save response to XML file.............................
+    public static void writeXml(Response serverResponse){
+        String outputFilePath = "resources\\Response"+serverResponse.getTerminalId()+".xml";
+
+        try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document;
+            File outputFile = new File(outputFilePath);
+            Element rootElement;
+
+            boolean fileExist = outputFile.exists();
+            if (!fileExist) {
+                document = documentBuilder.newDocument();
+                rootElement = document.createElement("Responses");
+                document.appendChild(rootElement);
+            } else {
+
+                document = documentBuilder.parse(outputFilePath);
+                rootElement = document.getDocumentElement();
+            }
+
+
+
+            //Node root = document.getFirstChild();
+            //rootElement = document.createElement("Responses");
+            //document.appendChild(rootElement);
+
+            Element responseElement = document.createElement("Response");
+
+            responseElement.setAttribute("id" , serverResponse.getResponseId());
+            responseElement.setAttribute("newBalance" , serverResponse.getNewBalance());
+            responseElement.setAttribute("Message" , serverResponse.getResponseMessage());
+            responseElement.setAttribute("TransactionType" , serverResponse.getTransactionType());
+            responseElement.setAttribute("TerminalId" , serverResponse.getTerminalId());
+            responseElement.setAttribute("CustomerId" , serverResponse.getCustomerId());
+
+            rootElement.appendChild(responseElement);
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(outputFile);
+            transformer.setOutputProperty(OutputKeys.INDENT ,"yes" );
+            transformer.transform(source, result);
+
+
+        }catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 
